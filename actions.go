@@ -13,7 +13,7 @@ type (
 )
 
 const (
-	MAX_LEN_TIMES = 10
+	MAX_LEN_TIMES = 8
 	DEFAULT_BPM   = 120
 )
 
