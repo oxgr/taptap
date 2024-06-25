@@ -15,12 +15,13 @@ type (
 const MAX_LEN_TIMES = 10
 
 func watch() error {
-	fmt.Println("q     \t: quit")
-	fmt.Println("r     \t: reset")
-	fmt.Println("<any> \t: tap")
+	fmt.Println()
+	fmt.Printf("%10s : %s\n", "q", "quit")
+	fmt.Printf("%10s : %s\n", "r", "reset")
+	fmt.Printf("%10s : %s\n", "<any", "tap")
 	fmt.Printf("\n\n")
 
-	printTempo(0)
+	printTempo(0, false)
 
 	// https://stackoverflow.com/q/15159118
 	//
@@ -42,7 +43,7 @@ loop:
 		switch key {
 		case "q":
 			tempo := getTempo(times)
-			printTempo(tempo)
+			printTempo(tempo, true)
 			break loop
 		case "r":
 			times = make(Times, 0)
@@ -51,7 +52,7 @@ loop:
 		default:
 			times = logTime(times, time.Now())
 			tempo := getTempo(times)
-			printTempo(tempo)
+			printTempo(tempo, false)
 
 			// fmt.Println("key:", key)
 		}
@@ -60,19 +61,27 @@ loop:
 	return nil
 }
 
-func print(msg string) error {
-	fmt.Printf("|\t%-18s|\r", msg)
+func print(msg string, newline bool) error {
+	var fmt_str string
+
+	base := "|\t%-18s|"
+	if newline {
+		fmt_str = base + "\n"
+	} else {
+		fmt_str = base + "\r"
+	}
+	fmt.Printf(fmt_str, msg)
 	return nil
 }
 
 func printReset() error {
-	print("reset!")
+	print("reset!", false)
 	return nil
 }
 
-func printTempo(tempo float32) error {
+func printTempo(tempo float32, newline bool) error {
 	bpm_msg := "BPM:"
-	print(fmt.Sprintf("%s %.2f", bpm_msg, tempo))
+	print(fmt.Sprintf("%s %.2f", bpm_msg, tempo), newline)
 	return nil
 }
 
