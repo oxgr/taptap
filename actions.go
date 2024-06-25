@@ -12,16 +12,19 @@ type (
 	Tempo = float32
 )
 
-const MAX_LEN_TIMES = 10
+const (
+	MAX_LEN_TIMES = 10
+	DEFAULT_BPM   = 120
+)
 
 func watch() error {
 	fmt.Println()
-	fmt.Printf("%10s : %s\n", "q", "quit")
-	fmt.Printf("%10s : %s\n", "r", "reset")
-	fmt.Printf("%10s : %s\n", "<any", "tap")
+	fmt.Printf("%9s : %s\n", "q", "quit")
+	fmt.Printf("%9s : %s\n", "r", "reset")
+	fmt.Printf("%9s : %s\n", "<any>", "tap")
 	fmt.Printf("\n\n")
 
-	printTempo(0, false)
+	printTempo(DEFAULT_BPM, false)
 
 	// https://stackoverflow.com/q/15159118
 	//
@@ -64,7 +67,7 @@ loop:
 func print(msg string, newline bool) error {
 	var fmt_str string
 
-	base := "|\t%-18s|"
+	base := "|\t%-14s|"
 	if newline {
 		fmt_str = base + "\n"
 	} else {
@@ -80,14 +83,15 @@ func printReset() error {
 }
 
 func printTempo(tempo float32, newline bool) error {
-	bpm_msg := "BPM:"
-	print(fmt.Sprintf("%s %.2f", bpm_msg, tempo), newline)
+	// bpm_msg := "BPM:"
+	// print(fmt.Sprintf("%s %.2f", bpm_msg, tempo), newline)
+	print(fmt.Sprintf("%.2f", tempo), newline)
 	return nil
 }
 
 func getTempo(times Times) Tempo {
 	if len(times) < 2 {
-		return 0
+		return DEFAULT_BPM
 	}
 
 	var totalMs int
